@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" style="width:500px;"></canvas>
+    <script>
+        var canvas=document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        function letter(x,y,l){
+            ctx.beginPath();
+            ctx.font = "12px Arial";
+            ctx.fillText(l, x+1, y+10);
+        }
+
+        const now = new Date(); 
+        
+        let hour=now.getHours();
+        let minute=now.getMinutes();
+        let second=now.getSeconds();
+        var radius=canvas.height/2-10;
+        var centerX=canvas.width/2;
+        var centerY=canvas.height/2;
+
+        function drawClock() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            var hourX=centerX+radius*Math.cos(Math.PI/2 - Math.PI*(hour%12)/6);
+            var hourY=centerY-radius*Math.sin(Math.PI/2 - Math.PI*(hour%12)/6);
+            var minuteX=centerX+radius*Math.cos(Math.PI/2 - Math.PI*(minute%60)/30);
+            var minuteY=centerY-radius*Math.sin(Math.PI/2 - Math.PI*(minute%60)/30);
+            var secondX=centerX+radius*Math.cos(Math.PI/2 - Math.PI*(second%60)/30);
+            var secondY=centerY-radius*Math.sin(Math.PI/2 - Math.PI*(second%60)/30);
+            
+            for(let i=1;i<7;i++)
+                letter(centerX+((hourX-centerX)/6)*i,centerY+((hourY-centerY)/6)*i,hour);
+            for(let i=1;i<7;i++)
+                letter(centerX+((minuteX-centerX)/6)*i,centerY+((minuteY-centerY)/6)*i,minute);
+            for(let i=1;i<7;i++)
+                letter(centerX+((secondX-centerX)/6)*i,centerY+((secondY-centerY)/6)*i,second);
+        }
+        function increaseTime(){
+            second++;
+            minute=minute+Math.floor(second/60);
+            hour=hour+Math.floor(minute/60);
+            second=second%60;
+            minute=minute%60;
+            hour=hour%12;
+        }
+        setInterval(function (){
+            drawClock();
+            increaseTime();      
+        }, 1000);
+        
+    </script>
+</body>
+</html>
